@@ -1,0 +1,55 @@
+I wrote this code myself.
+
+1***********************
+There are a few things that are wrong with this program.
+When running a command from the autograder that has an ampersand
+everything prints normally to stdout. However, when I redirect the
+actual autograder to instead print into a file, anything that my 
+forked child prints (even with no redirection happening from < or >
+inside my program) does not show up in the file I told the autograder
+to print to. For example:
+
+edoras ~/Two[643]% ~cssc0028/Two/p2 < ~cs570/Data2/input1 > a
+edoras ~/Two[644]% cat a
+p2: Null
+Void
+edoras ~/Two[645]%
+
+The file a, that I redirected output to, does not show the print! I 
+have spent quite some time trying to figure out why and I noticed that
+when I delete the execvp() command inside the child. The above 
+redirection starts working and my child once again puts things into
+file a.
+It is extremly strange because even redirection in my active shell
+works fine. For example,
+
+make: `p2' is up to date.
+edoras ~/Two[655]% p2
+p2: < a cat > b
+p2: cat b
+This is the contents of file a.
+p2:
+
+To recieve one more point from the autograder, I can put the print statement
+of the name of the background process[pid] inside of the parent's
+process,but the problem with this is that the pid will be wrong. But atleast the
+background process will show in the file.
+I've spent hours rechecking my parser() and the redirection instructions inside my
+program. I took the function execute() out to see if the execvp command was acting
+weird because of the function, but nothing. I am at a total loss with this.
+
+2************************
+killpg() is still showing up unrecognized even though I #include everything the man
+pages says to include
+
+3***********************
+Since I point to the file name of a redirector inside myBuffer with newargv. I do
+some checks to avoid "seeing" the file. But since it is in the newargv, commands like
+the following one will not work correctly:
+
+echo > fileIn Dr. Carroll
+
+echo will be found, but echo wont find the string "Dr. Carroll". I can fix this (and
+I am currently working on not pointing to a director's file name) but that means I would
+have to change the way I check badly-constructed commands, but no time if I want to make
+the extra-credit deadline. 
